@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class ArchivageApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(ArchivageApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(ArchivageApplication.class, args);
+    }
 
 }
