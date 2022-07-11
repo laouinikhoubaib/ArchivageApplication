@@ -25,7 +25,8 @@ public class User {
     private String username;
     private int phoneNumber;
     private String password;
-    private String Email;
+    private String email;
+    private int active;
 
     @ManyToMany(fetch = FetchType.LAZY)
     private Set<Role> roles = new HashSet<>();
@@ -36,6 +37,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     private Set<File> files;
 
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    private Code code;
 
 
     public User(String username, String email, String password, String firstname, String lastname, int phoneNumber, boolean b) {

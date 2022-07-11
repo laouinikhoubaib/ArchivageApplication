@@ -4,14 +4,11 @@ package com.spring.archivageapplication.Controller;
 
 import com.spring.archivageapplication.Models.User;
 import com.spring.archivageapplication.Repository.userRepository;
-import com.spring.archivageapplication.Service.userService;
+import com.spring.archivageapplication.Service.User.userService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RequestMapping("/admin")
 @RestController
