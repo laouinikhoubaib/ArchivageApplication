@@ -36,4 +36,8 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL)
     private Set<File> files;
 
+
+
+    public User(String username, String email, String password, String firstname, String lastname, int phoneNumber, boolean b) {
+    }
 }
