@@ -1,4 +1,4 @@
-package com.spring.archivageapplication.Service;
+package com.spring.archivageapplication.Service.User;
 
 import com.spring.archivageapplication.Models.User;
 
