@@ -2,13 +2,14 @@ package com.spring.archivageapplication.Service;
 
 import com.spring.archivageapplication.Models.User;
 import com.spring.archivageapplication.Repository.userRepository;
+import com.spring.archivageapplication.Service.User.userService;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @Service
-public class userServiceImpl implements userService{
+public class userServiceImpl implements userService {
 
     userRepository ur;
 
