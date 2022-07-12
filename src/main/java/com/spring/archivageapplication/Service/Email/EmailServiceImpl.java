@@ -15,11 +15,13 @@ public class EmailServiceImpl implements EmailService {
 
     @Autowired
     public EmailServiceImpl(JavaMailSender javaMailSender) {
+
         this.javaMailSender = javaMailSender;
     }
 
     @Async
     public void sendEmail(SimpleMailMessage email) {
+
         javaMailSender.send(email);
     }
 

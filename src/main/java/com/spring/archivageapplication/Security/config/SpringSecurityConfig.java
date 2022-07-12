@@ -51,9 +51,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         daoAuthenticationProvider.setUserDetailsService(userService);
         return daoAuthenticationProvider;
+        //récupèrer les détails de l'utilisateur à partir d'un fichier UserDetailsService
     }
     @Bean
     PasswordEncoder passwordEncoder(){
+
         return new BCryptPasswordEncoder();
     }
 
@@ -66,10 +68,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilter(new JwtAuthorizationFilter(authenticationManager(),userRepository))
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+                .antMatchers("/admin/**").permitAll()
                 .antMatchers("/signin").permitAll()
                 .antMatchers("/signup").permitAll()
                 .antMatchers("/active").permitAll()
                 .antMatchers("/activated").permitAll()
+                .antMatchers("/checkEmail").permitAll()
+                .antMatchers("/resetPassword").permitAll()
                 .anyRequest().authenticated();
     }
 }

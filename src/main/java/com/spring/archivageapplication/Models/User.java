@@ -28,8 +28,6 @@ public class User {
     private String email;
     private int active;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.ALL)
     private Set<Complaint> complaints;
@@ -40,7 +38,8 @@ public class User {
     @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private Code code;
 
-
+    @ManyToMany(fetch = FetchType.LAZY)
+    private Set<Role> roles = new HashSet<>();
     public User(String username, String email, String password, String firstname, String lastname, int phoneNumber, boolean b) {
     }
 }
