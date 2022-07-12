@@ -4,6 +4,7 @@ package com.spring.archivageapplication.Controller;
 import com.spring.archivageapplication.Dto.*;
 import com.spring.archivageapplication.Models.Code;
 import com.spring.archivageapplication.Models.User;
+import com.spring.archivageapplication.Repository.AuthRepository;
 import com.spring.archivageapplication.Security.Jwt.TokenService;
 import com.spring.archivageapplication.Security.Services.UserDetailssService;
 import com.spring.archivageapplication.Service.Email.EmailService;
@@ -24,16 +25,17 @@ public class AuthentificationController {
     private EmailService emailService;
     @Autowired
     PasswordEncoder encoder;
-
     @Autowired
     UserDetailssService userServiceAuth;
-
+    @Autowired
+    AuthRepository userRepository;
     @Autowired
     private TokenService tokenService;
 
 
     @PostMapping("/signin")
-    public LoginResponse logIn(@RequestBody JwtLogin jwtLogin){
+    public LoginResponse logIn(@RequestBody JwtLogin jwtLogin) {
+
         return tokenService.login(jwtLogin);
     }
 
@@ -50,25 +52,27 @@ public class AuthentificationController {
             user.setEmail(jwtsignup.getEmail());
             user.setPassword(encoder.encode(jwtsignup.getPassword()));
             user.setUsername(jwtsignup.getUsername());
-            user.setActive(0);user.setFirstname(jwtsignup.getFirstname());
-			user.setLastname(jwtsignup.getLastname());
+            user.setFirstname(jwtsignup.getFirstname());
+            user.setLastname(jwtsignup.getLastname());
             user.setPhoneNumber(jwtsignup.getPhoneNumber());
+            user.setActive(0);
 
-            Mail mail = new Mail(jwtsignup.getEmail(), myCode);
-            emailService.sendCodeByEmail(mail);
-            Code code = new Code();
-            code.setCode(myCode);
-            user.setCode(code);
-            userServiceAuth.addUser(user);
-            accountResponse.setResult(1);
+
+                Mail mail = new Mail(jwtsignup.getEmail(), myCode);
+                emailService.sendCodeByEmail(mail);
+                Code code = new Code();
+                code.setCode(myCode);
+                user.setCode(code);
+                userServiceAuth.addUser(user);
+                accountResponse.setResult(1);
+
+            }
+            return accountResponse;
 
         }
-        return accountResponse;
-
-    }
 
     @PostMapping("/active")
-    public UserActive getActiveUser(@RequestBody JwtLogin jwtLogin) {
+    public UserActive getActiveUser (@RequestBody JwtLogin jwtLogin){
         String enPassword = userServiceAuth.getPasswordByEmail(jwtLogin.getEmail()); // from
         // DB
         boolean result = encoder.matches(jwtLogin.getPassword(), enPassword); // Sure
@@ -90,8 +94,10 @@ public class AuthentificationController {
         return userActive;
     }
 
+
+
     @PostMapping("/activated")
-    public AccountResponse activeAccount(@RequestBody ActiveAccount activeAccount) {
+    public AccountResponse activeAccount (@RequestBody ActiveAccount activeAccount){
         User user = userServiceAuth.getUserByMail(activeAccount.getMail());
         AccountResponse accountResponse = new AccountResponse();
         if (user.getCode().getCode().equals(activeAccount.getCode())) {
@@ -110,4 +116,45 @@ public class AuthentificationController {
 
         return accountResponse;
     }
+
+    @PostMapping("/checkEmail")
+    public AccountResponse resetPasswordEmail(@RequestBody ResetPassword resetPassword) {
+         boolean result = this.userServiceAuth.ifEmailExist(resetPassword.getEmail());
+        User user = userServiceAuth.getUserByMail(resetPassword.getEmail());
+        AccountResponse accountResponse = new AccountResponse();
+        if (user != null) {
+            String code = VerificationCode.getCode();
+            Mail mail = new Mail(resetPassword.getEmail(), code);
+            emailService.sendCodeByEmail(mail);
+            user.getCode().setCode(code);
+            userServiceAuth.editUser(user);
+            accountResponse.setResult(1);
+
+        } else {
+            accountResponse.setResult(0);
+
+        }
+        return accountResponse;
+    }
+
+    @PostMapping("/resetPassword")
+    public AccountResponse resetPassword(@RequestBody NewPassword newPassword) {
+        User user = userServiceAuth.getUserByMail(newPassword.getEmail());
+        AccountResponse accountResponse = new AccountResponse();
+        if (user != null) {
+            if (user.getCode().getCode().equals(newPassword.getCode())) {
+                user.setPassword(encoder.encode(newPassword.getPassword()));
+                userServiceAuth.addUser(user);
+                accountResponse.setResult(1);
+            } else {
+                accountResponse.setResult(0);
+            }
+        } else {
+            accountResponse.setResult(0);
+        }
+        return accountResponse;
+    }
+
+
+
 }
