@@ -6,29 +6,27 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.Collection;
 
 
-
-
-
+@Entity
 @Getter
 @Setter
-@Entity
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "roles")
 
-@Table(name = "role")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-
     private String name;
 
-    public Role(String name) {
+    @ManyToMany(mappedBy = "roles")
+    private Collection<User> users;
 
-        this.name = name;
-    }
+
+
 }

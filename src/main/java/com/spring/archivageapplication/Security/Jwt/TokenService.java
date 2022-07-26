@@ -32,7 +32,7 @@ public class TokenService {
         // Create JWT Token
         String token = JWT.create()
                 .withSubject(principal.getUsername())
-                .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
+                .withExpiresAt(new Date(System.currentTimeMillis()+ JwtProperties.EXPIRATION_TIME))
                 .sign(HMAC512(JwtProperties.SECRET.getBytes()));
         return token;
     }
@@ -42,6 +42,6 @@ public class TokenService {
                 jwtLogin.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = generateToken(authenticate);
-        return new LoginResponse(jwtLogin.getEmail(),token);
+        return new LoginResponse(token);
     }
 }

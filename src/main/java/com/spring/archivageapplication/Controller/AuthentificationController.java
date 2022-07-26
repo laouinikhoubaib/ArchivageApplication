@@ -3,22 +3,28 @@ package com.spring.archivageapplication.Controller;
 
 import com.spring.archivageapplication.Dto.*;
 import com.spring.archivageapplication.Models.Code;
+import com.spring.archivageapplication.Models.Role;
 import com.spring.archivageapplication.Models.User;
 import com.spring.archivageapplication.Repository.AuthRepository;
+import com.spring.archivageapplication.Repository.RoleRepository;
 import com.spring.archivageapplication.Security.Jwt.TokenService;
 import com.spring.archivageapplication.Security.Services.UserDetailssService;
 import com.spring.archivageapplication.Service.Email.EmailService;
 import com.spring.archivageapplication.Service.Email.VerificationCode;
+//import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashSet;
+import java.util.Set;
+
 
 @RestController
-@RequestMapping
+@SecurityRequirement(name = "/api")
+@CrossOrigin(origins = "http://localhost:4200")
 public class AuthentificationController {
 
     @Autowired
@@ -29,6 +35,10 @@ public class AuthentificationController {
     UserDetailssService userServiceAuth;
     @Autowired
     AuthRepository userRepository;
+
+    @Autowired
+    RoleRepository roleRepository;
+
     @Autowired
     private TokenService tokenService;
 
@@ -45,7 +55,10 @@ public class AuthentificationController {
         AccountResponse accountResponse = new AccountResponse();
         boolean result = userServiceAuth.ifEmailExist(jwtsignup.getEmail());
         if (result) {
-            accountResponse.setResult(0);
+            accountResponse.setResult(500);
+            accountResponse.setMsg("Registration failed");
+            accountResponse.setCode(1);
+
         } else {
             String myCode = VerificationCode.getCode();
             User user = new User();
@@ -55,6 +68,8 @@ public class AuthentificationController {
             user.setFirstname(jwtsignup.getFirstname());
             user.setLastname(jwtsignup.getLastname());
             user.setPhoneNumber(jwtsignup.getPhoneNumber());
+            Set<String> strRoles = jwtsignup.getRole();
+            userRepository.save(user);
             user.setActive(0);
 
 
@@ -64,7 +79,9 @@ public class AuthentificationController {
                 code.setCode(myCode);
                 user.setCode(code);
                 userServiceAuth.addUser(user);
-                accountResponse.setResult(1);
+                accountResponse.setResult(200);
+                accountResponse.setMsg("Successful Registration");
+                accountResponse.setCode(2);
 
             }
             return accountResponse;

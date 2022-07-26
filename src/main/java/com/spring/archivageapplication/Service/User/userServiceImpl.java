@@ -18,20 +18,21 @@ public class userServiceImpl implements userService {
     }
 
     @Override
-    public List<User> getAllUsers()
+    public List<User> getUsers()
     {
-        List<User> users = new ArrayList<>();
-        ur.findAll().forEach(users::add);
-        return users;
+        List<User> user = new ArrayList<>();
+        ur.findAll().forEach(user::add);
+        return user;
     }
 
     @Override
     public User getUserById(Long id) {
+
         return ur.findById(id).get();
     }
 
     @Override
-    public User addUser(User user) {
+    public User insert(User user) {
         return ur.save(user);
     }
 
@@ -40,11 +41,11 @@ public class userServiceImpl implements userService {
 
         User fromDb = ur.findById(id).get();
         System.out.println(fromDb.toString());
-
         fromDb.setFirstname(user.getFirstname());
         fromDb.setLastname(user.getLastname());
         fromDb.setEmail(user.getEmail());
         fromDb.setPassword(user.getPassword());
+        fromDb.setUsername(user.getUsername());
         fromDb.setPhoneNumber(user.getPhoneNumber());
 
         ur.save(fromDb);
@@ -52,6 +53,9 @@ public class userServiceImpl implements userService {
 
     @Override
     public void deleteUser(Long id) {
+
         ur.deleteById(id);
     }
+
+
 }

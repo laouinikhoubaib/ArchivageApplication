@@ -17,5 +17,7 @@ public class JwtSignUp {
     private String firstname;
     private String lastname;
     private int phoneNumber;
+    private Set<String> role;
+            ;
 
 }

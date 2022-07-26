@@ -14,15 +14,19 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private UserDetailssService userService;
@@ -46,35 +50,53 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    DaoAuthenticationProvider authenticationProvider(){
+    DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         daoAuthenticationProvider.setUserDetailsService(userService);
         return daoAuthenticationProvider;
         //récupèrer les détails de l'utilisateur à partir d'un fichier UserDetailsService
     }
+
     @Bean
-    PasswordEncoder passwordEncoder(){
+    PasswordEncoder passwordEncoder() {
 
         return new BCryptPasswordEncoder();
     }
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .addFilter(new JwtAuthorizationFilter(authenticationManager(),userRepository))
-                .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS,"/**").permitAll()
-                .antMatchers("/admin/**").permitAll()
-                .antMatchers("/signin").permitAll()
-                .antMatchers("/signup").permitAll()
-                .antMatchers("/active").permitAll()
-                .antMatchers("/activated").permitAll()
-                .antMatchers("/checkEmail").permitAll()
-                .antMatchers("/resetPassword").permitAll()
+    public void configure(HttpSecurity http) throws Exception {
+        http.cors().and().csrf().disable();
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.authorizeRequests()
+                .antMatchers("/api/**","/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/signup",
+                        "/activated",
+                        "/swagger-ui.html/**",
+                        "/swagger-resources",
+                        "/swagger-resources/**",
+                        "/configuration/ui",
+                        "/configuration/**",
+                        "/api/**").permitAll()
                 .anyRequest().authenticated();
+//                .and()
+//                .httpBasic();
+//        http.authorizeRequests().anyRequest().authenticated();
+
+
     }
+    private static final String[] AUTH_WHITELIST = {
+            "/v3/api-docs/**",
+            "/swagger-ui/**",
+            "/swagger-ui.html/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/**",
+            "/api/**"
+    };
+
+
 }
+
