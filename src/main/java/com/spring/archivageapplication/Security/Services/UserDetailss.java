@@ -1,51 +1,45 @@
 package com.spring.archivageapplication.Security.Services;
 
 
+import com.spring.archivageapplication.Models.Role;
 import com.spring.archivageapplication.Models.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
-import java.util.Objects;
+import java.util.*;
 
 
 public class UserDetailss implements UserDetails {
 
 
     private static final long serialVersionUID = 1L;
-    User user;
+    private User user;
     private Long id;
+
     private String username;
+
     private String email;
 
     private String password;
 
-
     private Collection<? extends GrantedAuthority> authorities;
-
-
-
-
-    public UserDetailss(Long id, String username, String email, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
-        super();
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.authorities = authorities;
-    }
-
-
 
     public UserDetailss(User user) {
         super();
         this.user = user;
     }
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
+
+//        Set<Role> roles = user.getRoles();
+//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//
+//        for (Role role : roles) {
+//            authorities.add(new SimpleGrantedAuthority(role.getName()));
+//        }
 
         return authorities;
     }
