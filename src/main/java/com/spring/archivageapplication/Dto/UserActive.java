@@ -1,13 +1,20 @@
 package com.spring.archivageapplication.Dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 public class UserActive {
 
-    private int active;
+
+    private int active=0;
+    private String msg="";
+    private int result = 0;
+
+    public UserActive() {
+        this.active = active;
+        this.msg = msg;
+        this.result = result;
+    }
 }

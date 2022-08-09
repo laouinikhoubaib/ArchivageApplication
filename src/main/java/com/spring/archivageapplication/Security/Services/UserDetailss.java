@@ -18,9 +18,12 @@ public class UserDetailss implements UserDetails {
     private Long id;
 
     private String username;
+
     private String email;
 
     private String password;
+
+    private Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailss(User user) {
         super();
@@ -30,15 +33,18 @@ public class UserDetailss implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
-        Set<Role> roles = user.getRoles();
-        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 
-        for (Role role : roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getName()));
-        }
+//        Set<Role> roles = user.getRoles();
+//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//
+//        for (Role role : roles) {
+//            authorities.add(new SimpleGrantedAuthority(role.getName()));
+//        }
 
         return authorities;
     }
+
+
     @Override
     public String getPassword() {
 

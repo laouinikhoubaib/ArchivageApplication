@@ -4,7 +4,10 @@ import com.auth0.jwt.JWT;
 import com.spring.archivageapplication.Dto.JwtLogin;
 import com.spring.archivageapplication.Dto.JwtProperties;
 import com.spring.archivageapplication.Dto.LoginResponse;
+import com.spring.archivageapplication.Models.User;
 import com.spring.archivageapplication.Security.Services.UserDetailss;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -43,5 +46,16 @@ public class TokenService {
         SecurityContextHolder.getContext().setAuthentication(authenticate);
         String token = generateToken(authenticate);
         return new LoginResponse(token);
+    }
+    public String generateAccessToken(User user) {
+
+        return Jwts.builder()
+                .setSubject(String.format("%s,%s", user.getId(), user.getEmail()))
+                .setIssuer("CodeJava")
+                .claim("roles", user.getRoles().toString())
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
+                .signWith(SignatureAlgorithm.HS512, JwtProperties.SECRET)
+                .compact();
     }
 }

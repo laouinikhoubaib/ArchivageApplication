@@ -17,12 +17,19 @@ public class Complaint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int Complaint_id;
     private String description;
-    private Date date;
+
+    @Temporal(TemporalType.DATE)
+    private Date ComplaintDate;
 
     @Enumerated(EnumType.STRING)
     private ComplaintType name;
+
+    @Enumerated(EnumType.STRING)
+    ComplaintStatus complaint_status;
+
+    private boolean Etat;
 
     @ManyToOne
     User user;

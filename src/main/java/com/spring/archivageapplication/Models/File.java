@@ -3,8 +3,7 @@ package com.spring.archivageapplication.Models;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.Date;
-
+import java.time.LocalDateTime;
 
 
 @Getter
@@ -13,21 +12,31 @@ import java.util.Date;
 @AllArgsConstructor
 @ToString
 @Entity
+@Builder
 @Table(name = "file")
 public class File {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    private String libelle;
-    private Date addDate;
-    private Date updateDate;
-    private String updateOwner;
+  @Id
+  @GeneratedValue (strategy = GenerationType.IDENTITY)
+  private int idfile ;
+    private String name;
+    private String type;
 
-    @Enumerated(EnumType.STRING)
-    private FileType fileType;
+    private LocalDateTime uploadDate=LocalDateTime.now();
+
+    @Lob
+    private byte[] data;
 
     @ManyToOne
     User user;
+
+
+  public File(String name,  String type,byte[] data) {
+
+    this.name = name;
+    this.data = data;
+    this.type = type;
+  }
+
 }

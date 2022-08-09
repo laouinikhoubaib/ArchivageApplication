@@ -1,12 +1,8 @@
 package com.spring.archivageapplication.Models;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -40,22 +36,35 @@ public class User {
     private boolean isEnabled;
 
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private Set<Complaint> complaints;
+    @OneToMany(cascade = CascadeType.ALL,mappedBy="user")
+//    @JoinTable(
+//            name = "users_complaint",
+//            joinColumns = @JoinColumn(
+//                    name = "user_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(
+//                    name = "Complaint-id", referencedColumnName = "Complaint-id"))
+    private Set<Complaint>complaint;
 
     @OneToMany(cascade = CascadeType.ALL)
+//    @JoinTable(
+//            name = "users_file",
+//            joinColumns = @JoinColumn(
+//                    name = "user_id", referencedColumnName = "id"),
+//            inverseJoinColumns = @JoinColumn(
+//                    name = "idfile", referencedColumnName = "idfile"))
     private Set<File> files;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Code code;
 
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "users_roles",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles = new HashSet<>();
 
     public User(String username, String email, String password, String firstname, String lastname, int phoneNumber, boolean b) {

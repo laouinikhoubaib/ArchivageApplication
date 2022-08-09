@@ -18,6 +18,6 @@ public class JwtSignUp {
     private String lastname;
     private int phoneNumber;
     private Set<String> role;
-            ;
+
 
 }
