@@ -5,10 +5,12 @@ import com.spring.archivageapplication.Models.Complaint;
 import com.spring.archivageapplication.Service.Complaint.ComplaintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 import java.util.List;
 
 @RestController
-@RequestMapping("/complaint")
+@RequestMapping("/api/complaint")
 public class ComplaintController {
 
     @Autowired
@@ -32,6 +34,13 @@ public class ComplaintController {
     public List<Complaint> retrieveAllComplaints() {
 
         return ComplaintService.retrieveAllComplaints();
+    }
+
+    @PostMapping("/affectatComplaintToUser/{Complaint_id}/{id}")
+    @ResponseBody
+    public void affectatComplaintToUser(@PathVariable("Complaint_id") int Complaint_id,@PathVariable("id")int id) throws IOException {
+
+        ComplaintService.affectatComplaintToUser(Complaint_id, id);
     }
 
 }

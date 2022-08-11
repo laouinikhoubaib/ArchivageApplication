@@ -14,16 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/admin")
 @CrossOrigin(origins = "http://localhost:4200")
-public class UserController {
+public class AdminController {
 
     userService us;
 
     @Autowired
     userRepository repo;
 
-    public UserController(userService us) {
+    public AdminController(userService us) {
 
         this.us = us;
     }
@@ -39,11 +39,6 @@ public class UserController {
         }
     }
 
-    @PutMapping({"/update/{id}"})
-    public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user) {
-        us.updateUser(id, user);
-        return new ResponseEntity<>(us.getUserById(id), HttpStatus.OK);
-    }
 
     @DeleteMapping({"/delete/{id}"})
     public ResponseEntity<User> deleteUser(@PathVariable("id") Long id) {
@@ -67,9 +62,13 @@ public class UserController {
     }
 
     @GetMapping("/getall")
-    public ResponseEntity<List<User>> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String username) {
         try {
-            List<User> users = new ArrayList<>();
+            List<User> users = new ArrayList<User>();
+            if (username == null)
+                repo.findAll().forEach(users::add);
+            else
+                repo.findByUsername(username).forEach(users::add);
             if (users.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
@@ -82,18 +81,18 @@ public class UserController {
     @GetMapping("/getBy/username")
     public ResponseEntity<List<User>> getUserByUsername(@RequestParam(required = false) String username) {
         try {
-            List<User> tutorials = new ArrayList<User>();
+            List<User> users = new ArrayList<User>();
             if (username == null)
-                repo.findAll().forEach(tutorials::add);
+                repo.findAll().forEach(users::add);
             else
-                repo.findByUsername(username).forEach(tutorials::add);
+                repo.findByUsername(username).forEach(users::add);
 
 
-            if (tutorials.isEmpty()) {
+            if (users.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
             }
-            return new ResponseEntity<>(tutorials, HttpStatus.OK);
+            return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

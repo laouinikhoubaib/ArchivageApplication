@@ -12,4 +12,5 @@ public interface ComplaintService {
     public void deleteComplaint(Integer id);
     public List<Complaint> retrieveAllComplaints();
 
+    public void affectatComplaintToUser(int Complaint_id, long id);
 }

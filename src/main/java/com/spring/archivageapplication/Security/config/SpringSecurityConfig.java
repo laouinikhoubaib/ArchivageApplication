@@ -71,26 +71,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/api/**","/v3/api-docs/**","/**",
                         "/swagger-ui/**",
-                        "/signup",
-                        "/activated",
-                        "/active",
-                        "/checkEmail",
-                        "/resetPassword",
-                        "/social/google",
-                        "social/facebook",
-                        "/signin",
-                        "/upload",
-                        "/between",
-                        "/files",
-                        "/affectatFileToUser/**",
-                        "/files/{filename:.+}",
                         "/swagger-ui.html/**",
                         "/swagger-resources",
                         "/swagger-resources/**",
                         "/configuration/ui",
                         "/configuration/**",
-                        "/complaint/**",
-                        "/api/**").permitAll()
+                        "/api/complaint/**",
+                        "/api/user/**",
+                        "/api/admin/**",
+                        "/api/file/**",
+                        "/api/auth/**"
+                        ).permitAll()
                 .anyRequest().authenticated();
 //                .and()
 //                .httpBasic();

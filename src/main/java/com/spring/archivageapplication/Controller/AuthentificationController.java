@@ -34,6 +34,7 @@ import java.util.Set;
 
 @RestController
 @SecurityRequirement(name = "/api")
+@RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:4200")
 public class AuthentificationController {
 
