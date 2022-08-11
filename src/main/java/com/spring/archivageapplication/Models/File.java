@@ -23,6 +23,8 @@ public class File {
     private String name;
     private String type;
 
+  private String url;
+
     private LocalDateTime uploadDate=LocalDateTime.now();
 
     @Lob

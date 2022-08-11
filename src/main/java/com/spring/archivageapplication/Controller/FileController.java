@@ -9,6 +9,7 @@ import java.time.format.DateTimeFormatter;
 import com.spring.archivageapplication.Dto.ResponseFile;
 import com.spring.archivageapplication.Dto.ResponseMessage;
 import com.spring.archivageapplication.Models.File;
+import com.spring.archivageapplication.Models.User;
 import com.spring.archivageapplication.Repository.FileDBRepository;
 import com.spring.archivageapplication.Service.Files.FilesStorageService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -17,19 +18,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 
-
 @Controller
 @SecurityRequirement(name = "/api")
+@RequestMapping("/api/file")
 @CrossOrigin("http://localhost:4200")
 public class FileController{
 
@@ -80,6 +76,27 @@ public class FileController{
                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getName() + "\"")
                .body(fileDB.getData());
        }
+    @PutMapping({"/updatefile/{id}"})
+    public ResponseEntity<File> updateFile(@PathVariable("id") int id, @RequestBody File file) {
+        storageService.updateFile(id,file);
+        return new ResponseEntity<>(storageService.getFile(id), HttpStatus.OK);
+    }
+
+    @DeleteMapping({"/deletefile/{id}"})
+    public ResponseEntity<User> deleteFile(@PathVariable("id") int id) {
+        storageService.deleteFile(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("/deleteAllFiles")
+    public ResponseEntity<HttpStatus> deleteAllFiles() {
+        try {
+            fr.deleteAll();
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("/between")
     public ResponseEntity<?> findBetweenDate(@RequestParam String start, @RequestParam String end) {

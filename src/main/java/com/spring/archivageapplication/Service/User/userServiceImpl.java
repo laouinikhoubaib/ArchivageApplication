@@ -2,7 +2,6 @@ package com.spring.archivageapplication.Service.User;
 
 import com.spring.archivageapplication.Models.User;
 import com.spring.archivageapplication.Repository.userRepository;
-import com.spring.archivageapplication.Service.User.userService;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,12 +26,12 @@ public class userServiceImpl implements userService {
 
     @Override
     public User getUserById(Long id) {
-
         return ur.findById(id).get();
     }
 
     @Override
     public User insert(User user) {
+
         return ur.save(user);
     }
 

@@ -37,21 +37,9 @@ public class User {
 
 
     @OneToMany(cascade = CascadeType.ALL,mappedBy="user")
-//    @JoinTable(
-//            name = "users_complaint",
-//            joinColumns = @JoinColumn(
-//                    name = "user_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(
-//                    name = "Complaint-id", referencedColumnName = "Complaint-id"))
     private Set<Complaint>complaint;
 
     @OneToMany(cascade = CascadeType.ALL)
-//    @JoinTable(
-//            name = "users_file",
-//            joinColumns = @JoinColumn(
-//                    name = "user_id", referencedColumnName = "id"),
-//            inverseJoinColumns = @JoinColumn(
-//                    name = "idfile", referencedColumnName = "idfile"))
     private Set<File> files;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
