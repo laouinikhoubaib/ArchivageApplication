@@ -6,6 +6,8 @@ import com.spring.archivageapplication.Service.Complaint.ComplaintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.mail.MessagingException;
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 
@@ -34,6 +36,16 @@ public class ComplaintController {
     public List<Complaint> retrieveAllComplaints() {
 
         return ComplaintService.retrieveAllComplaints();
+    }
+
+    @PutMapping("/updateCompalaint/{Compalaint-id}")
+    public void updateComplaint(@RequestBody Complaint newcomplaint, @PathVariable("Compalaint-id") int idComplaint) {
+        ComplaintService.updateComplaint(newcomplaint, idComplaint);
+    }
+    @PutMapping("/updateUntreatedComplaint/{Compalaint-id}")
+    @Transactional
+    public Complaint updateComplaint2(@PathVariable(value ="Compalaint-id")Integer id) throws MessagingException {
+        return ComplaintService.updateComplaint2(id);
     }
 
     @PostMapping("/affectatComplaintToUser/{Complaint_id}/{id}")
