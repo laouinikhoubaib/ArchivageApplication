@@ -68,36 +68,26 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-        http.authorizeRequests()
-                .antMatchers("/api/**","/v3/api-docs/**","/**",
-                        "/swagger-ui/**",
-                        "/swagger-ui.html/**",
-                        "/swagger-resources",
-                        "/swagger-resources/**",
-                        "/configuration/ui",
-                        "/configuration/**",
-                        "/api/complaint/**",
-                        "/api/user/**",
-                        "/api/admin/**",
-                        "/api/file/**",
-                        "/api/auth/**"
-                        ).permitAll()
-                .anyRequest().authenticated();
-//                .and()
-//                .httpBasic();
-//        http.authorizeRequests().anyRequest().authenticated();
+        http.authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll();
+        http.authorizeRequests().antMatchers("/api/admin/**").hasAuthority("SuperAdmin");
+        http.authorizeRequests().antMatchers("/api/admin/**").hasAuthority("Admin");
+        http.authorizeRequests().anyRequest().authenticated();
+
 
 
     }
     private static final String[] AUTH_WHITELIST = {
-            "/v3/api-docs/**",
+            "/v3/api-docs/**","/**",
+            "/api/**",
             "/swagger-ui/**",
             "/swagger-ui.html/**",
             "/swagger-resources",
             "/swagger-resources/**",
             "/configuration/ui",
             "/configuration/**",
-            "/api/**"
+            "/api/user/**",
+            "/api/auth/**",
+            "/api/admin/**"
     };
 
 

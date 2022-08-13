@@ -13,4 +13,8 @@ public interface ComplaintService {
     public List<Complaint> retrieveAllComplaints();
 
     public void affectatComplaintToUser(int Complaint_id, long id);
+
+    public void updateComplaint( Complaint newcomplaint, int idComplaint);
+
+    public Complaint  updateComplaint2(Integer id) throws MessagingException ;
 }

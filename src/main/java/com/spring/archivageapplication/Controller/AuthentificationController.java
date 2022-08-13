@@ -17,6 +17,7 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.social.facebook.api.Facebook;
 import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -36,6 +37,7 @@ import java.util.Set;
 @SecurityRequirement(name = "/api")
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:4200")
+@PreAuthorize("hasRole('SuperAdmin') or hasRole('Admin')or hasRole('User')")
 public class AuthentificationController {
 
     @Autowired
