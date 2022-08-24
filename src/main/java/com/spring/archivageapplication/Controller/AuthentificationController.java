@@ -37,7 +37,6 @@ import java.util.Set;
 @SecurityRequirement(name = "/api")
 @RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:4200")
-@PreAuthorize("hasRole('SuperAdmin') or hasRole('Admin')or hasRole('User')")
 public class AuthentificationController {
 
     @Autowired
@@ -83,6 +82,7 @@ public class AuthentificationController {
             user.setFirstname(jwtsignup.getFirstname());
             user.setLastname(jwtsignup.getLastname());
             user.setPhoneNumber(jwtsignup.getPhoneNumber());
+            user.setActive(0);
             Set<String> strRoles = jwtsignup.getRole();
 			Set<Role> roles = new HashSet<>();
 			if (strRoles == null) {
@@ -112,7 +112,7 @@ public class AuthentificationController {
                 });
                 user.setRoles(roles);
                 userRepository.save(user);
-                user.setActive(0);
+
             }
 
                 Mail mail = new Mail(jwtsignup.getEmail(), myCode);
@@ -167,18 +167,18 @@ public class AuthentificationController {
             accountResponse.setResult(200);
             accountResponse.setMsg("Registration Completed");
             accountResponse.setCode(2);
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(user.getEmail());
-            mailMessage.setSubject("Complete Registration!");
-            mailMessage.setFrom("laouinikhoubaib@gmail.com");
-            mailMessage.setText("Congratuations ! Your Account has been activated  and email is verified");
-            emailService.sendEmail(mailMessage);
+
         } else {
             accountResponse.setResult(500);
             accountResponse.setMsg("Internal Server Error");
             accountResponse.setCode(1);
         }
-
+        SimpleMailMessage mailMessage = new SimpleMailMessage();
+        mailMessage.setTo(user.getEmail());
+        mailMessage.setSubject("Complete Registration!");
+        mailMessage.setFrom("laouinikhoubaib@gmail.com");
+        mailMessage.setText("Congratuations ! Your Account has been activated  and email is verified");
+        emailService.sendEmail(mailMessage);
         return accountResponse;
     }
 

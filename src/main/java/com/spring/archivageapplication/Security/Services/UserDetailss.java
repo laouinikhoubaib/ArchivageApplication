@@ -35,11 +35,11 @@ public class UserDetailss implements UserDetails {
 
 
 //        Set<Role> roles = user.getRoles();
-//        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//       List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 //
-//        for (Role role : roles) {
+//       for (Role role : roles) {
 //            authorities.add(new SimpleGrantedAuthority(role.getName()));
-//        }
+//       }
 
         return authorities;
     }
