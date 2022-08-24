@@ -73,7 +73,7 @@ public class ComplaintServiceImpl implements  ComplaintService{
             oldComplaint.setComplaint_status(ComplaintStatus.treated);
             oldComplaint.setEtat(true);
             es.sendSimpleMessage(Email, "Check in your Complaint requested on "+requestDate+""+ "with id" +oldComplaint.getComplaint_id(),
-                    "Hello Mr/Mrs" + "" +fname+ "" +lname+"your complaint is treated succefully on"+""+now,"/Users/khoubaib/Desktop/khoubaib.jpg");
+                    "Hello Mr/Mrs" + " " +fname+ "" +lname+"your complaint is treated succefully on"+""+now,"/Users/khoubaib/Desktop/khoubaib.jpg");
         }
 
         return Crepo.save(oldComplaint);
